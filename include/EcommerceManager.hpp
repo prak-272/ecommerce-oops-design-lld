@@ -14,7 +14,7 @@ private:
 
 public:
    EcommerceManager();
-   void registerAccount(const std::string& accountType,const std::string& UserName, const std::string& UserPhoneNo,const std::string& UserAddress);
+   User* registerAccount(const std::string& accountType,const std::string& UserName, const std::string& UserPhoneNo,const std::string& UserAddress);
    void removeAdminAccount(int adminId);
    void removeCustomerAccount(int customerId);
    Inventory* getProductInventory();

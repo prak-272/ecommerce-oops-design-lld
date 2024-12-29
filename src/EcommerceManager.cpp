@@ -9,18 +9,20 @@
 
 EcommerceManager::EcommerceManager() : ProductInventory(std::unique_ptr<Inventory>(new Inventory())) {}
 
-void EcommerceManager::registerAccount(const std::string& accountType,const std::string& UserName, const std::string& UserPhoneNo,const std::string& UserAddress) {
-    if(accountType == "admin") {
+User* EcommerceManager::registerAccount(const std::string& accountType,const std::string& UserName, const std::string& UserPhoneNo,const std::string& UserAddress) {
+    if(accountType == "Admin") {
        std::unique_ptr<User> newUser = std::unique_ptr<User>(new Admin(UserName,UserPhoneNo,UserAddress,true));
+       User* adminAccount = newUser.get();
        Users.push_back(std::move(newUser));
        std::cout << "Admin account successfully registered" << std::endl;
-       return;
+       return adminAccount;
     }
-    else if(accountType == "customer") {
+    else if(accountType == "Customer") {
         std::unique_ptr<User> newUser = std::unique_ptr<User>(new Customer(UserName,UserAddress,UserPhoneNo,true));
+        User* customerAccount = newUser.get();
         Users.push_back(std::move(newUser));
         std::cout << "Customer Account is successfully registered" << std::endl;
-        return;
+        return customerAccount;
     }
     std::cout << "Account could not be registered. Please check entry and re submit" << std::endl;
 
@@ -36,7 +38,7 @@ void EcommerceManager::removeAdminAccount(int AdminId) {
         if(currentAdmin){
             if(currentAdmin->getAdminId() == AdminId){
                 Users.erase(it);
-                std::cout << "Admin Account is successfuly removed" << std::endl;
+                std::cout << "Admin Account is successfuly removed " << std::endl;
                 return;
             }
         }

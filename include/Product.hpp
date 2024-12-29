@@ -6,8 +6,8 @@
 class Product {
 private:
     std::string ProductName;
-    std::string ProductType;
     int ProductPrice;
+    std::string ProductType;
 
 public:   
     Product(const std::string& ProductName, int ProductPrice,const std::string& ProductType);

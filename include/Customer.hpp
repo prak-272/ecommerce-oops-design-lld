@@ -21,6 +21,7 @@ public:
     Customer(const std::string& UserName,const std::string& UserPhoneNo, const std::string& UserAddress,bool isLoggedIn);
     void addToCart(EcommerceManager& ecommerceManager,std::string ProductName,int ProductAmount);
     void removeFromCart(EcommerceManager& ecommerceManager,std::string ProductName);
+    void UpdateCartProducts(EcommerceManager& ecommerceManager,std::string ProductName,int newAmount);
     void OrderCartItems(PaymentMethod methodForPayment,EcommerceManager& ecommerceManager);
     void browseCart();
     void browseInventory(EcommerceManager& ecommerceManager);

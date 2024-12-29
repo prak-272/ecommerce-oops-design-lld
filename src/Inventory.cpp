@@ -10,14 +10,14 @@ Inventory::Inventory() {}
 void Inventory::addProduct(std::string ProductName,int ProductPrice,std::string ProdutType,int productAmount) {
     std::shared_ptr<Product> newProduct = std::shared_ptr<Product>(new Product(ProductName,ProductPrice,ProdutType));
     Products.push_back(std::make_pair(newProduct,productAmount));
-    std::cout << "Product" << ProductName <<  "is added to the inventory";
+    std::cout << "Product " << ProductName <<  " is added to the inventory" << std::endl;
 }
 
 void Inventory::removeProduct(std::string ProductName) {
     for(auto it = Products.begin(); it != Products.end(); it++) {
         if(it->first->getProductName() == ProductName) {
             Products.erase(it);
-            std::cout << "Product" << ProductName << "is removed from Inventory";
+            std::cout << "Product " << ProductName << " is removed from Inventory" << std::endl;
             return;
         }
     }
@@ -29,7 +29,7 @@ void Inventory::updateProductStock(std::string ProductName,int updateInAmount){
     for(auto it = Products.begin(); it != Products.end(); it++) {
         if(it->first->getProductName() == ProductName) {
             it->second += updateInAmount;
-            std::cout << "Product" << ProductName << "stock updated in Inventory";
+            std::cout << "Product " << ProductName << " stock updated in Inventory" << std::endl;
             return;
         }
     }
@@ -41,12 +41,12 @@ void Inventory::updateProductPriceInInventory(std::string ProductName,int newPro
     for(auto it = Products.begin(); it != Products.end(); it++) {
         if(it->first->getProductName() == ProductName) {
             it->first->setProductPrice(newProductPrice);
-            std::cout << "Product" << ProductName << "Price updated in Inventory";
+            std::cout << "Product " << ProductName << " Price updated in Inventory";
             return;
         }
     }
 
-    std::cout << "Product" << ProductName << " is not present in Inventory";
+    std::cout << "Product " << ProductName << " is not present in Inventory";
 }
 
 int Inventory::getProductAmount(std::string ProductName) {
@@ -64,6 +64,7 @@ std::shared_ptr<Product> Inventory::getProduct(std::string ProductName) {
             return it->first;
         }
     }
+    return nullptr;
 }
 
 void Inventory::browseInventory() {

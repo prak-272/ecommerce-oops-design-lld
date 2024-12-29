@@ -1,13 +1,13 @@
 #include "../include/Admin.hpp"
 #include<string>
 #include<iostream>
-int uniqueId  = 1;
+int uniqueAdminId  = 1;
 
-Admin::Admin(const std::string& UserName,const std::string& UserPhoneNo,const std::string& UserAddress,bool isLoggedIn) : User(UserName,UserPhoneNo,UserAddress,isLoggedIn), AdminId(uniqueId++) {}
+Admin::Admin(const std::string& UserName,const std::string& UserPhoneNo,const std::string& UserAddress,bool isLoggedIn) : User(UserName,UserPhoneNo,UserAddress,isLoggedIn), AdminId(uniqueAdminId++) {}
 
 bool Admin::isAdminLoggedIn() {
     if(!isLoggedIn){
-      std::cout << "Admin is not logged  in. Please  Login";
+      std::cout << "Admin is not logged  in. Please  Login" << std::endl;
       return false;
     } 
     return true;

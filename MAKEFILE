@@ -1,0 +1,21 @@
+CXX = g++
+
+CXXFLAGS = -Wall -Wextra -std=c++17 -Iinclude
+
+TARGET = app
+
+SRCS = main/main.cpp src/Admin.cpp src/Cart.cpp src/Customer.cpp src/EcommerceManager.cpp src/Inventory.cpp src/Order.cpp src/Payment.cpp src/User.cpp src/Product.cpp
+
+OBJS = $(SRCS:.cpp=.o)
+
+all: $(TARGET)
+
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJS)
+
+%.o : %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+.PHONY: clean
+clean:
+	rm -rf $(OBJS) $(TARGET)         

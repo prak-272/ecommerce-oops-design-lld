@@ -1,9 +1,9 @@
 #include "../include/Customer.hpp"
 #include<iostream>
 
-int uniqueId = 1;
+int uniqueCustomerId = 1;
 
-Customer::Customer(const std::string& UserName,const std::string& UserPhoneNo, const std::string& UserAddress,bool isLoggedIn) : User(UserName, UserPhoneNo, UserAddress, isLoggedIn), CustomerId(uniqueId++), customerCart(std::unique_ptr<Cart>(new Cart)) {} 
+Customer::Customer(const std::string& UserName,const std::string& UserPhoneNo, const std::string& UserAddress,bool isLoggedIn) : User(UserName, UserPhoneNo, UserAddress, isLoggedIn), CustomerId(uniqueCustomerId++), customerCart(std::unique_ptr<Cart>(new Cart)) {} 
 
 bool Customer::isCustomerLoggedIn() {
     if(!isLoggedIn) {
@@ -23,7 +23,16 @@ void Customer::removeFromCart(EcommerceManager& ecommerceManager,std::string Pro
    customerCart->RemoveFromCartProducts(ecommerceManager, ProductName);
 }
 
+void Customer::UpdateCartProducts(EcommerceManager& ecommerceManager,std::string ProductName,int newAmount){
+    if(!isCustomerLoggedIn())return;
+    customerCart->UpdateAmountOfProduct(ecommerceManager,ProductName,newAmount);
+}
+
 void Customer::OrderCartItems(PaymentMethod methodForPayment, EcommerceManager& ecommerceManager){
+    if(customerCart->getCartProducts().size() == 0){
+        std::cout << "Cart has no Products. Please add Products before ordering " << std::endl;
+        return;
+    }
     std::unique_ptr<Order> customerOrder = std::unique_ptr<Order>(new Order(customerCart->getCartProducts(),customerCart->getTotalPrice(),"Pending",methodForPayment));
     if(customerOrder->isOrderPossible(ecommerceManager)) { 
        customerOrder->paymentForOrder(ecommerceManager);                                    
@@ -44,9 +53,9 @@ void Customer::browseInventory(EcommerceManager& ecommerceManager){
 
 void Customer::browsePastOrders() {
    for(auto& it: previousOrders) {
-        std::cout << "Order Id" << it->getOrderId() << std::endl;
+        std::cout << "Order Id " << it->getOrderId() << std::endl;
         std::cout << "Order Prodcuts " << std::endl;
-        browsePastOrders();
+        it->BrowseOrderProducts();
         std::cout << "Order Amount " << it->getOrderAmount() << std::endl;
         // std::cout << "Method Of Payment " << PaymentMethod::(it->getMethodOfPayment());
         std::cout << std::endl;

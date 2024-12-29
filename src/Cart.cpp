@@ -5,15 +5,19 @@
 Cart::Cart() {}
 
 void Cart::AddToCartProducts(EcommerceManager& ecommerceManager,std::string ProductName,int ProductAmount) {
+    if(isProductInCart(ProductName)) {
+        UpdateAmountOfProduct(ecommerceManager,ProductName, getCartProductAmount(ProductName) + ProductAmount);
+        return;
+    }
     Inventory* ProductInventory = ecommerceManager.getProductInventory();
     int InventoryProductAmount = ProductInventory->getProductAmount(ProductName);
-    if(InventoryProductAmount <= ProductAmount){
+    if(InventoryProductAmount >= ProductAmount){
         cartProducts.push_back(std::make_pair(ProductInventory->getProduct(ProductName), ProductAmount));
-        std::cout << "Product" << ProductName << "is added to cart" << std::endl;
+        std::cout << "Product " << ProductName << " is added to cart" << std::endl;
         UpdateCartPrice(ProductInventory->getProduct(ProductName)->getProductPrice(), ProductAmount);
         return;
     }
-    std::cout << "Product" <<  ProductName << "is not sufficiently available in Inventory" << std::endl;
+    std::cout << "Product " <<  ProductName << " is not sufficiently available in Inventory" << std::endl;
     std::cout << "Current Stock " << InventoryProductAmount << std::endl;
 }
 
@@ -22,25 +26,31 @@ void Cart::RemoveFromCartProducts(EcommerceManager& ecommerceManager,std::string
     for(auto it = cartProducts.begin(); it != cartProducts.end(); it++) {
         if(it->first->getProductName() == ProductName) {
             cartProducts.erase(it);
-            std::cout << "Product" << ProductName << "is removed from cart" << std::endl;
+            std::cout << "Product " << ProductName << " is removed from cart" << std::endl;
             UpdateCartPrice(ProductInventory->getProduct(ProductName)->getProductPrice(), getCartProductAmount(ProductName));
             return;
         }
     }
-    std::cout << "Product" << ProductName << "is not present in cart" << std::endl;
+    std::cout << "Product " << ProductName << " is not present in cart" << std::endl;
 }
 
 void Cart::UpdateAmountOfProduct(EcommerceManager &ecommerceManager, std::string ProductName, int newAmount) {
     Inventory* ProductInventory = ecommerceManager.getProductInventory();
     for(auto it = cartProducts.begin(); it != cartProducts.end(); it++) {
         if(it->first->getProductName() == ProductName) {
-            it->second = newAmount;
-            std::cout << "Product" << ProductName << "amount is updated in cart" << std::endl;
+            int InventoryProductAmount = ProductInventory->getProductAmount(ProductName);
+            if(InventoryProductAmount <= newAmount){
+                std::cout << "Prooduct " <<  ProductName << " is not sufficiently available in Inventory" << std::endl;
+                std::cout << "Current Stock " << InventoryProductAmount << std::endl;
+                return;
+            }
             UpdateCartPrice(ProductInventory->getProduct(ProductName)->getProductPrice(), newAmount - getCartProductAmount(ProductName));
+            it->second = newAmount;
+            std::cout << "Product " << ProductName << "amount is updated in cart" << std::endl;
             return;
         }
     }
-    std::cout << "Product" << ProductName << "is not present in cart" << std::endl;
+    std::cout << "Product " << ProductName << " is not present in cart" << std::endl;
 }
 
 void Cart::browseCart() {
@@ -63,6 +73,7 @@ int Cart::getCartProductAmount(std::string ProductName) {
             return it->second;
         }
     }
+    return 0;
 }
 
 void Cart::UpdateCartPrice(int ProdcutPrice,int DifferenceInProductAmount) {
@@ -75,4 +86,13 @@ void Cart::setCartProducts(std::vector<std::pair<std::shared_ptr<Product>, int> 
 
 void Cart::setTotalPrice(int newTotalPrice) {
      totalPrice = newTotalPrice;
+}
+
+bool Cart::isProductInCart(std::string ProductName) {
+    for(auto it = cartProducts.begin(); it != cartProducts.end(); it++ ){
+        if(it->first->getProductName() == ProductName){
+            return true;
+        }
+    }
+    return false;
 }

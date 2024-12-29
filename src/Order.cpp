@@ -3,9 +3,9 @@
 #include<memory>
 #include<string>
 
-int uniqueId = 1;
+int uniqueOrderId = 1;
 
-Order::Order(std::vector<std::pair<std::shared_ptr<Product>,int> > OrderProducts,int OrderAmount,std::string OrderStatus,PaymentMethod MethodOfPayment) : OrderProducts(OrderProducts), OrderAmount(OrderAmount), OrderStatus(OrderStatus), MethodOfPayment(MethodOfPayment), OrderId(uniqueId++) {}
+Order::Order(std::vector<std::pair<std::shared_ptr<Product>,int> > OrderProducts,int OrderAmount,std::string OrderStatus,PaymentMethod MethodOfPayment) : OrderId(uniqueOrderId++), OrderProducts(OrderProducts), OrderAmount(OrderAmount), OrderStatus(OrderStatus), MethodOfPayment(MethodOfPayment) {}
 
 bool Order::isOrderPossible(EcommerceManager& ecommerceManager) {
     Inventory* ProdcutInventory = ecommerceManager.getProductInventory();
@@ -29,6 +29,7 @@ void Order::paymentForOrder(EcommerceManager& ecommerceManager) {
     OrderPayment = std::unique_ptr<Payment>(new Payment(MethodOfPayment,OrderAmount));
     OrderPayment->PaymentSuccessful();
     std::cout <<  "Order Successful";
+    std::cout << std::endl;
     OrderStatus = "Delivered";
 }
 

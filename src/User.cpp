@@ -11,3 +11,6 @@ void User::Logout() {
    isLoggedIn = false;
 }
 
+User::~User() {
+
+}

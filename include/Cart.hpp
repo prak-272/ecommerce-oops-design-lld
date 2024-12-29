@@ -23,7 +23,7 @@ public:
     void setCartProducts(std::vector<std::pair<std::shared_ptr<Product>, int> > newCartProducts);
     void setTotalPrice(int newTotalPrice);
     void UpdateCartPrice(int ProductPrice,int DifferenceInProductAmount);
-
+    bool isProductInCart(std::string ProductName);
 };
 
 #endif
